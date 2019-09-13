@@ -1,0 +1,86 @@
+use bitmasks ! you need to include the bitmasks_module.f90 features
+
+BEGIN_PROVIDER [ integer, n_ciruns_cippres ]
+  implicit none
+  BEGIN_DOC
+! number of CI runs to be performed (as defined in the XML input file)
+  END_DOC
+  PROVIDE ezfio_filename
+  call ezfio_set_cippres_n_ciruns_cippres(n_ciruns_cippres)
+END_PROVIDER
+
+BEGIN_PROVIDER [ integer, n_det_max_csf  ]
+  implicit none
+  BEGIN_DOC
+! maximum number of determinants for a given CSFs (default is 6 because the CSFs are hard-coded in spineigenfunction.py and its max value is 6 so far)
+  END_DOC
+  PROVIDE ezfio_filename
+  call ezfio_set_cippres_n_det_max_csf(n_det_max_csf)
+END_PROVIDER
+
+BEGIN_PROVIDER [ integer, n_csf_max  ]
+  implicit none
+  BEGIN_DOC
+! maximum number of CSFs for a given CI run (given by the python script generate_csfs.py via the parser.txt file)
+  END_DOC
+  PROVIDE ezfio_filename
+  call ezfio_set_cippres_n_csf_max(n_csf_max)
+END_PROVIDER
+
+ BEGIN_PROVIDER [integer(bit_kind), csf_basis, (N_int,2, n_det_max_csf, n_csf_max ,n_ciruns_cippres )]
+&BEGIN_PROVIDER [double precision, coef_det_csf_basis, (n_det_max_csf, n_csf_max ,n_ciruns_cippres )]
+&BEGIN_PROVIDER [integer, n_csf_cippres, (n_ciruns_cippres )]
+&BEGIN_PROVIDER [integer, n_det_csf_cippres, (n_csf_max,n_ciruns_cippres )]
+ implicit none
+!  integer :: ispace
+!  integer :: i,j
+
+  ! read the diff...
+!  do ispace
+!   read n_csf(ispace
+!   do i = 1, n_csf(ispace
+!    read n_det(i)
+!    do j = 1, n_det(i)
+!     read(occ_alpha)
+!     read(occ_beta)
+!     call create_det(elec_alpha_num,elec_beta_num,occ_alpha,occ_b,csf_basis(1,1,j,i,ispace
+!     read(coef)
+!     coef_det_csf_basis(j,i,ispace
+!    enddo
+!   enddo
+!  enddo
+END_PROVIDER 
+
+
+!BEGIN_PROVIDER [double precision, H_matrix_cippres, (n_csf_max,n_csf_max,n_ciruns_cippres)]
+! implicit none
+! integer :: ispace
+! integer :: i,j,k,l
+! double precision :: hij
+! H_matrix_cippres, = 0.d0
+! do ispace
+!  do i = n_csf_cippres(ispace) ! first loop on the csf of the space ispace 
+!   do j = n_csf_cippres(ispace)
+!    do k = 1, n_det_csf_cippres(i,ispace) ! then on the determinants belonging to the ith CSF of space ispace
+!     do l = 1, n_det_csf_cippres(j,ispace)
+!      call i_H_j( csf_basis(1,1,k,i,ispace) , csf_basis(1,1,l,j,ispace),N_int,hij)
+!      H_matrix_cippres(j,i,ispace) += hij * coef_det_csf_basis(k,i,ispace) * coef_det_csf_basis(l,j,ispace) 
+!     enddo
+!    enddo
+!   enddo
+!  enddo
+! enddo
+!END_PROVIDER 
+
+
+!BEGIN_PROVIDER [double precision, eigvectors_cippres, (n_csf_max,n_ciruns_cippres)]
+! implicit none
+!  integer :: ispace, j
+! do ispace = 1, n_ciruns_cippres
+!  call lapack_diagd(eigval,eigvec,H_matrix_cippres(1,1,ispace),n_csf_cippres(ispace),n_csf_max) 
+!  do j = 1, n_csf_cippres(ispace)
+!   eigvectors_cippres(j,ispace) = eigvec(j,ispace_que_tas_choisi)
+!  enddo
+! enddo
+! call ezfio_set_cippres_eigvectors_cippres(eigvectors_cippres)
+!END_PROVIDER 
